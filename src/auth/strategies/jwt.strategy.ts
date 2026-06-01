@@ -13,19 +13,28 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { userId: number; username: string; role: string }) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: payload.userId }, 
+  async validate(payload: {
+  userId: number;
+  username: string;
+  role: string;
+}) {
+  const user =
+    await this.prisma.user.findUnique({
+      where: {
+        id: payload.userId,
+      },
     });
 
-    if (!user) {
-      throw new UnauthorizedException('Token tidak valid atau user tidak ditemukan');
-    }
-
-    return {
-      userId: user.id,
-      username: user.username,
-      role: user.role,
-    };
+  if (!user) {
+    throw new UnauthorizedException(
+      'User tidak ditemukan',
+    );
   }
+
+  return {
+    userId: user.id,
+    username: user.username,
+    role: user.role,
+  };
+}
 }
