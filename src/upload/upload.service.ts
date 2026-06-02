@@ -15,18 +15,11 @@ export class UploadService {
   async uploadImage(file: Express.Multer.File, folder: string = 'foods'): Promise<string> {
     return new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
-        {
-          folder: folder,
-          transformation: [{ width: 500, height: 500, crop: 'limit' }],
-        },
+        { folder, transformation: [{ width: 500, height: 500, crop: 'limit' }] },
         (error, result) => {
-          if (error) {
-            reject(error);
-          } else if (result && result.secure_url) {
-            resolve(result.secure_url);
-          } else {
-            reject(new Error('Upload failed: no result from Cloudinary'));
-          }
+          if (error) reject(error);
+          else if (result?.secure_url) resolve(result.secure_url);
+          else reject(new Error('Upload failed'));
         },
       ).end(file.buffer);
     });

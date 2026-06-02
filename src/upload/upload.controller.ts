@@ -20,9 +20,7 @@ export class UploadController {
   @ApiBody({
     schema: {
       type: 'object',
-      properties: {
-        file: { type: 'string', format: 'binary' },
-      },
+      properties: { file: { type: 'string', format: 'binary' } },
     },
   })
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
