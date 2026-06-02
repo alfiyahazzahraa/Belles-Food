@@ -4,8 +4,11 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { RolesGuard } from '../auth/guards/roles.guard';     
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'; 
 
+@ApiTags('Categories')  
+@ApiBearerAuth()        
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
@@ -19,12 +22,14 @@ export class CategoriesController {
 
   @Get()
   findAll() {
-  console.log('GET CATEGORY HIT');
-  return this.categoriesService.findAll();
-}
+    console.log('GET CATEGORY HIT');
+    return this.categoriesService.findAll();
+  }
   
   @Get(':id')
-  findOne() {}
+  findOne(@Param('id', ParseIntPipe) id: number) { 
+    return this.categoriesService.findOne(id);     
+  }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
