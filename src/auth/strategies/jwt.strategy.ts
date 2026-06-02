@@ -6,37 +6,36 @@ import { PrismaService } from '../../prisma/prisma.service';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private prisma: PrismaService) {
+    const secret = process.env.JWT_SECRET;
+
+    if (!secret) {
+      throw new Error('JWT_SECRET is not defined');
+    }
+
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'KUNCI_RAHASIA_SUPER_AMAN',
+      secretOrKey: secret,
     });
   }
 
   async validate(payload: {
-  userId: number;
-  username: string;
-  role: string;
-}) {
+    userId: number;
+    username: string;
+    role: string;
+  }) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.userId },
+    });
 
-  console.log('JWT PAYLOAD:', payload);
+    if (!user) {
+      throw new UnauthorizedException('User tidak ditemukan');
+    }
 
-  const user = await this.prisma.user.findUnique({
-    where: {
-      id: payload.userId,
-    },
-  });
-
-  if (!user) {
-    throw new UnauthorizedException(
-      'User tidak ditemukan',
-    );
+    return {
+      userId: user.id,
+      username: user.username,
+      role: user.role,
+    };
   }
-
-  return {
-    userId: user.id,
-    username: user.username,
-    role: user.role,
-  };
-}
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'; 
+import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -11,7 +11,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     PrismaModule,
     PassportModule,
     JwtModule.register({
-      secret: 'KUNCI_RAHASIA_SUPER_AMAN',
+      secret: process.env.JWT_SECRET, 
       signOptions: { expiresIn: '1d' },
     }),
   ],
