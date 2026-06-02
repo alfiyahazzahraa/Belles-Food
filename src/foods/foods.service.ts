@@ -8,22 +8,24 @@ export class FoodsService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateFoodDto) {
-  const data: any = {
-    name: dto.name,
-    price: dto.price,
-    description: dto.description,
-    categoryId: dto.categoryId,
-  };
-  
-  if (dto.imageUrl) {
-    data.imageUrl = dto.imageUrl;
-  }
+    const data: any = {
+      name: dto.name,
+      price: dto.price,
+      description: dto.description,
+      categoryId: dto.categoryId,
+    };
+    
+    if (dto.imageUrl && dto.imageUrl.trim() !== '') {
+      data.imageUrl = dto.imageUrl;
+    }
 
-  return this.prisma.food.create({
-    data,
-    include: { category: true },
-  });
-}
+    console.log('Creating food with data:', data); 
+
+    return this.prisma.food.create({
+      data,
+      include: { category: true },
+    });
+  }
 
   async findAll() {
     return this.prisma.food.findMany({
@@ -53,7 +55,9 @@ export class FoodsService {
     if (dto.price !== undefined) data.price = dto.price;
     if (dto.description !== undefined) data.description = dto.description;
     if (dto.categoryId !== undefined) data.categoryId = dto.categoryId;
-    if (dto.imageUrl !== undefined) data.imageUrl = dto.imageUrl;
+    if (dto.imageUrl !== undefined && dto.imageUrl.trim() !== '') {
+      data.imageUrl = dto.imageUrl;
+    }
 
     return this.prisma.food.update({
       where: { id },
