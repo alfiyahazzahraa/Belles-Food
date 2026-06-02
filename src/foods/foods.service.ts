@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateFoodDto } from './dto/create-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
+import { GetFoodDto } from './dto/get-food.dto';
 
 @Injectable()
 export class FoodsService {
@@ -19,16 +20,38 @@ export class FoodsService {
       data.imageUrl = dto.imageUrl;
     }
 
-    console.log('Creating food with data:', data); 
-
     return this.prisma.food.create({
       data,
       include: { category: true },
     });
   }
 
-  async findAll() {
+  async findAll(filter: GetFoodDto ) {
+    const where: any = {};
+    
+    if (filter.categoryId) {
+      where.categoryId = filter.categoryId;
+    }
+    
+    if (filter.minPrice !== undefined || filter.maxPrice !== undefined) {
+      where.price = {};
+      if (filter.minPrice !== undefined) {
+        where.price.gte = filter.minPrice;
+      }
+      if (filter.maxPrice !== undefined) {
+        where.price.lte = filter.maxPrice;
+      }
+    }
+    
+    if (filter.search && filter.search.trim() !== '') {
+      where.OR = [
+        { name: { contains: filter.search } },
+        { description: { contains: filter.search } },
+      ];
+    }
+    
     return this.prisma.food.findMany({
+      where,
       include: { category: true },
       orderBy: { id: 'asc' },
     });
