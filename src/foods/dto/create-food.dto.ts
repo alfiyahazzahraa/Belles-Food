@@ -1,25 +1,26 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  Min,
-} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsNumber, IsOptional, Min } from 'class-validator';
 
 export class CreateFoodDto {
-
+  @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   name: string;
 
-  @IsInt()
-  @Min(1000)
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
   price: number;
 
+  @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   description: string;
 
-  @IsInt()
-  @Min(1)
+  @ApiProperty()
+  @IsNumber()
   categoryId: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  imageUrl: string;
 }

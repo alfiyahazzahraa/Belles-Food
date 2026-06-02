@@ -21,6 +21,7 @@ model Food {
   price       Int
   description String
   categoryId  Int
+  imageUrl    String        
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   category    Category      @relation(fields: [categoryId], references: [id])
@@ -55,7 +56,7 @@ model OrderDetail {
   orderId   Int
   foodId    Int
   qty       Int
-  price     Int
+  price     Int      
   createdAt DateTime @default(now())
   food      Food     @relation(fields: [foodId], references: [id])
   order     Order    @relation(fields: [orderId], references: [id])

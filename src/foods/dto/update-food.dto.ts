@@ -1,27 +1,4 @@
-import {
-  IsInt,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreateFoodDto } from './create-food.dto';
 
-export class UpdateFoodDto {
-
-  @IsString()
-  @IsOptional()
-  name?: string;
-
-  @IsInt()
-  @Min(1000)
-  @IsOptional()
-  price?: number;
-
-  @IsString()
-  @IsOptional()
-  description?: string;
-
-  @IsInt()
-  @Min(1)
-  @IsOptional()
-  categoryId?: number;
-}
+export class UpdateFoodDto extends PartialType(CreateFoodDto) {}
