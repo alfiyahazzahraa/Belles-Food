@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards,ParseIntPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FoodsService } from './foods.service';
 import { CreateFoodDto } from './dto/create-food.dto';
@@ -8,9 +8,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('foods')
 export class FoodsController {
-  constructor(
-    private readonly foodsService: FoodsService,
-  ) {}
+  constructor(private readonly foodsService: FoodsService) {}
 
   @Get()
   findAll() {
@@ -18,19 +16,14 @@ export class FoodsController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id', ParseIntPipe)
-    id: number,
-  ) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.foodsService.findOne(id);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Post()
-  create(
-    @Body() dto: CreateFoodDto,
-  ) {
+  create(@Body() dto: CreateFoodDto) {
     return this.foodsService.create(dto);
   }
 
@@ -38,23 +31,16 @@ export class FoodsController {
   @Roles('ADMIN')
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe)
-    id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateFoodDto,
   ) {
-    return this.foodsService.update(
-      id,
-      dto,
-    );
+    return this.foodsService.update(id, dto);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Delete(':id')
-  remove(
-    @Param('id', ParseIntPipe)
-    id: number,
-  ) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.foodsService.remove(id);
   }
 }
