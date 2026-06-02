@@ -15,17 +15,20 @@ export class CategoriesService {
       data: dto,
     });
   }
-
+  
   async findAll() {
-    return this.prisma.category.findMany({
-      include: {
-        foods: true,
-      },
-      orderBy: {
-        id: 'asc',
-      },
-    });
-  }
+  const data = await this.prisma.category.findMany({
+    include: {
+      foods: true,
+    },
+    orderBy: {
+      id: 'asc',
+    },
+  });
+  console.log('=== CATEGORY DATA ===');
+  console.log(JSON.stringify(data, null, 2));
+  return data;
+}
 
   async findOne(id: number) {
     const category =

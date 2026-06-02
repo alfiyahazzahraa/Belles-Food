@@ -19,13 +19,12 @@ export class CategoriesController {
 
   @Get()
   findAll() {
-    return this.categoriesService.findAll();
-  }
-
+  console.log('GET CATEGORY HIT');
+  return this.categoriesService.findAll();
+}
+  
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.categoriesService.findOne(id);
-  }
+  findOne() {}
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
