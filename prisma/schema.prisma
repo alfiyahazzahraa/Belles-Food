@@ -21,7 +21,7 @@ model Food {
   price       Int
   description String
   categoryId  Int
-  imageUrl    String        
+  imageUrl    String?        
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   category    Category      @relation(fields: [categoryId], references: [id])

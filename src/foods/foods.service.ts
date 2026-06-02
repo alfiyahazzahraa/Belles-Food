@@ -8,24 +8,22 @@ export class FoodsService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateFoodDto) {
-    // Pisahkan data, jangan langsung pake dto
-    const data: any = {
-      name: dto.name,
-      price: dto.price,
-      description: dto.description,
-      categoryId: dto.categoryId,
-    };
-    
-    // Hanya tambahin imageUrl kalau ada nilainya
-    if (dto.imageUrl) {
-      data.imageUrl = dto.imageUrl;
-    }
-
-    return this.prisma.food.create({
-      data,
-      include: { category: true },
-    });
+  const data: any = {
+    name: dto.name,
+    price: dto.price,
+    description: dto.description,
+    categoryId: dto.categoryId,
+  };
+  
+  if (dto.imageUrl) {
+    data.imageUrl = dto.imageUrl;
   }
+
+  return this.prisma.food.create({
+    data,
+    include: { category: true },
+  });
+}
 
   async findAll() {
     return this.prisma.food.findMany({
