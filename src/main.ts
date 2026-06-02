@@ -17,7 +17,8 @@ async function bootstrap() {
     .setTitle("Belle's Food API")
     .setDescription("Backend API Sistem Food")
     .setVersion('1.0')
-    .addBearerAuth() 
+    .addBearerAuth()
+    .addSecurityRequirements('bearerAuth')  
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
